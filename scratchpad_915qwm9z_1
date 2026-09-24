@@ -1,0 +1,19 @@
+# Task Checklist & Notes
+
+## Objective
+Verify the UI and functionality of `file:///c:/Users/THINKPAD%20X13/Vibes%20Codes/Pembuktian_Anril.html`.
+
+## Tasks
+- [x] Open `file:///c:/Users/THINKPAD%20X13/Vibes%20Codes/Pembuktian_Anril.html` in browser
+- [x] Verify UI renders cleanly (take screenshot, check overall layout)
+- [x] Test Dark/Light Mode toggle
+- [x] Test clicking a step chip in "Susun Ulang Bukti"
+- [x] Verify interactivity / functionality of other elements (navigation tabs, Latihan Mandiri proof worksheet)
+- [x] Provide summary report
+
+## Observations
+- The visual design render is clean, modern, and high-quality, utilizing glassmorphism, HSL color palette, dark background, and clean typography.
+- The **Dark/Light Mode toggle** switches themes smoothly. Dark mode is default, and Light mode turns the background light gray with crisp dark text.
+- In **Susun Ulang Bukti**, clicking a step chip places the step into the proof construction slot ("Urutan Konstruksi Bukti Anda"). Clicking the placed step removes it back to the available options pool.
+- Mode switcher tabs (**Susun Ulang Bukti**, **Latihan Mandiri**, **Nilai Akhir**) switch views cleanly and accurately update the left problem list and main interactive content.
+

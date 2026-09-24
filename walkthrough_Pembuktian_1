@@ -1,0 +1,35 @@
+# Walkthrough - Peningkatan Visual & Interaktivitas Pembuktian_Anril.html
+
+Kami telah memperbarui dan mempercantik seluruh tampilan web interaktif **Analisis Riil: Bab 1 (Pembuktian 3 Kolom)** pada file [`Pembuktian_Anril.html`](file:///c:/Users/THINKPAD%20X13/Vibes%20Codes/Pembuktian_Anril.html).
+
+## Perubahan Utama yang Diterapkan
+
+### 1. Sistem Desain Modern & Tema (Dark & Light Mode)
+- **Visual Glassmorphism**: Panel semi-transparan dengan `backdrop-filter: blur(12px)` dan *shadow* berlapis yang memberikan elevasi modern.
+- **Warna HSL Premium**: Menggunakan palet Deep Indigo (`#6366F1`), Amber (`#F59E0B`), Emerald (`#10B981`), dan Rose (`#F43F5E`).
+- **Fitur Toggle Mode**: Tombol di pojok kanan atas untuk beralih antara **Dark Mode** (default) dan **Light Mode** secara responsif.
+
+### 2. Tipografi & Tata Letak Sub-Bab
+- **Font Pairing**: Memadukan *Plus Jakarta Sans* untuk antarmuka UI, *EB Garamond* untuk kutipan dan teorema matematika, serta *JetBrains Mono* untuk kode & rumus.
+- **Sidebar Terkelompok**: Soal-soal pada sidebar kini dikelompokkan secara rapi berdasarkan sub-bab:
+  - `1.1 Himpunan & Fungsi`
+  - `1.2 Induksi Matematika`
+  - `1.3 Keterhitungan Himpunan`
+
+### 3. Komponen Interaktif & Animasi Mikro
+- **Segmented Control Mode Switcher**: Navigasi antar mode *Susun Ulang Bukti*, *Latihan Mandiri*, dan *Nilai Akhir* dengan gaya *pill control*.
+- **Susun Ulang Bukti**: Kartu *step chip* dengan efek *hover lift* (`transform: translateY(-2px)`), slot target interaktif, serta indikator centang/silang animasi saat jawaban diperiksa.
+- **Latihan Mandiri**: Form lembar kerja *textarea* yang rapi, tombol aksi dengan *focus glow*, dan *Clue Budget System* (maksimal 3 clue per sesi).
+- **Nilai Akhir**: Panel ringkasan nilai besar dengan *score badge*, metadata progres, dan tabel rincian per teorema.
+
+---
+
+## Verifikasi Visual & Fungsi
+
+Seluruh pengujian interaktif telah dijalankan menggunakan browser otomatis:
+
+1. **Dark & Light Mode**: Berjalan mulus dan mempertahankan kontras tinggi.
+2. **Penyusunan Langkah Bukti**: Langkah yang diklik berpindah dari pool ke slot urutan, dan dapat dibatalkan kembali ke pool dengan klik pada slot.
+3. **Penyimpanan Progres**: Seluruh progres dan nilai tersimpan otomatis di perangkat lokal (`window.storage` & `localStorage`).
+
+![Browser Verification Recording](file:///C:/Users/THINKPAD%20X13/.gemini/antigravity-ide/brain/69d2e3d7-114b-4816-981c-48f5095729e3/pembuktian_anril_demo_1788833885295.webp)
