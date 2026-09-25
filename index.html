@@ -1,0 +1,2080 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analisis Riil : Bab 1 (Pembuktian 3 Kolom)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <style>
+    :root {
+      --bg: #0F172A;
+      --bg-gradient: radial-gradient(circle at 50% 0%, #1E1B4B 0%, #0F172A 65%, #020617 100%);
+      --panel: rgba(30, 41, 59, 0.72);
+      --panel-solid: #1E293B;
+      --panel-border: rgba(255, 255, 255, 0.1);
+      --panel-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+      --ink: #F8FAFC;
+      --ink-soft: #94A3B8;
+      --ink-muted: #64748B;
+      --line: rgba(255, 255, 255, 0.12);
+
+      --primary: #6366F1;
+      --primary-hover: #4F46E5;
+      --primary-soft: rgba(99, 102, 241, 0.15);
+      --primary-border: rgba(99, 102, 241, 0.35);
+      --primary-glow: 0 0 24px rgba(99, 102, 241, 0.4);
+
+      --ochre: #F59E0B;
+      --ochre-soft: rgba(245, 158, 11, 0.15);
+      --ochre-border: rgba(245, 158, 11, 0.35);
+
+      --good: #10B981;
+      --good-soft: rgba(16, 185, 129, 0.15);
+      --good-border: rgba(16, 185, 129, 0.35);
+
+      --bad: #F43F5E;
+      --bad-soft: rgba(244, 63, 94, 0.15);
+      --bad-border: rgba(244, 63, 94, 0.35);
+
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    [data-theme="light"] {
+      --bg: #F8FAFC;
+      --bg-gradient: radial-gradient(circle at 50% 0%, #EEF2FF 0%, #F8FAFC 70%, #E2E8F0 100%);
+      --panel: rgba(255, 255, 255, 0.88);
+      --panel-solid: #FFFFFF;
+      --panel-border: rgba(226, 232, 240, 0.85);
+      --panel-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+      --ink: #0F172A;
+      --ink-soft: #475569;
+      --ink-muted: #94A3B8;
+      --line: #E2E8F0;
+
+      --primary: #4F46E5;
+      --primary-hover: #4338CA;
+      --primary-soft: rgba(79, 70, 229, 0.08);
+      --primary-border: rgba(79, 70, 229, 0.25);
+      --primary-glow: 0 0 20px rgba(79, 70, 229, 0.2);
+
+      --ochre: #D97706;
+      --ochre-soft: rgba(217, 119, 6, 0.08);
+      --ochre-border: rgba(217, 119, 6, 0.25);
+
+      --good: #059669;
+      --good-soft: rgba(5, 150, 105, 0.08);
+      --good-border: rgba(5, 150, 105, 0.25);
+
+      --bad: #E11D48;
+      --bad-soft: rgba(225, 29, 72, 0.08);
+      --bad-border: rgba(225, 29, 72, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    #app {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 24px 80px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+
+    /* Header */
+    .site-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .header-content {
+      flex: 1;
+      min-width: 280px;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      border: 1px solid var(--primary-border);
+      color: var(--primary);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .site-header h1 {
+      font-family: 'EB Garamond', serif;
+      font-weight: 700;
+      font-size: 2.6rem;
+      margin: 0 0 10px;
+      letter-spacing: -0.01em;
+      line-height: 1.15;
+      background: linear-gradient(135deg, var(--ink) 30%, var(--ink-soft));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .site-header p {
+      font-family: 'EB Garamond', serif;
+      font-style: italic;
+      color: var(--ink-soft);
+      margin: 0;
+      max-width: 72ch;
+      font-size: 1.18rem;
+      line-height: 1.6;
+    }
+
+    .header-controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* Theme & Lang Toggle */
+    .theme-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .theme-toggle-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* Mode Switcher */
+    .mode-switch {
+      display: flex;
+      gap: 8px;
+      margin: 0 0 28px;
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--panel-border);
+      padding: 6px;
+      border-radius: 999px;
+      box-shadow: var(--panel-shadow);
+      width: fit-content;
+      max-width: 100%;
+      flex-wrap: wrap;
+    }
+
+    .mode-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      padding: 10px 22px;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mode-btn:hover {
+      color: var(--ink);
+    }
+
+    .mode-btn.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      box-shadow: var(--primary-glow);
+    }
+
+    /* Layout */
+    .layout {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 840px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Sidebar */
+    .problem-list {
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      padding: 14px;
+      position: sticky;
+      top: 20px;
+      box-shadow: var(--panel-shadow);
+    }
+
+    .group-header {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 12px 10px 6px;
+      margin-top: 6px;
+    }
+
+    .group-header:first-child {
+      margin-top: 0;
+    }
+
+    .problem-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      text-align: left;
+      padding: 12px 14px;
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      background: transparent;
+      cursor: pointer;
+      color: var(--ink-soft);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      line-height: 1.4;
+      transition: all 0.15s ease;
+      margin-bottom: 3px;
+    }
+
+    .problem-item:hover {
+      background: var(--primary-soft);
+      color: var(--ink);
+    }
+
+    .problem-item.active {
+      background: var(--primary-soft);
+      border-color: var(--primary-border);
+      color: var(--primary);
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+    }
+
+    .problem-item .badge {
+      flex: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: var(--primary-soft);
+      border: 1px solid var(--primary-border);
+      border-radius: 6px;
+      padding: 2px 6px;
+    }
+
+    .problem-item.active .badge {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* Main Panel */
+    .panel {
+      background: var(--panel);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      box-shadow: var(--panel-shadow);
+    }
+
+    /* Statement Card */
+    .statement-card {
+      position: relative;
+      background: linear-gradient(135deg, var(--primary-soft) 0%, rgba(99, 102, 241, 0.02) 100%);
+      border: 1px solid var(--primary-border);
+      border-left: 5px solid var(--primary);
+      border-radius: var(--radius-md);
+      padding: 22px 26px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.02);
+    }
+
+    .statement-card .label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .statement-card p {
+      font-family: 'EB Garamond', serif;
+      font-size: 1.38rem;
+      line-height: 1.6;
+      margin: 0;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 1.02rem;
+      margin: 0 0 12px;
+      color: var(--ink);
+    }
+
+    .hint {
+      color: var(--ink-soft);
+      font-size: 0.88rem;
+      margin: 0 0 16px;
+      line-height: 1.5;
+    }
+
+    /* Reorder Mode */
+    .pool {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 26px;
+      min-height: 54px;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.03);
+      border: 1.5px dashed var(--line);
+      border-radius: var(--radius-md);
+    }
+
+    .chip {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border: 1px solid var(--line);
+      background: var(--panel-solid);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      line-height: 1.45;
+      max-width: 380px;
+      text-align: left;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    .chip:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px -4px rgba(99, 102, 241, 0.25);
+    }
+
+    .chip .p {
+      margin: 0;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .chip .a {
+      margin: 0;
+      color: var(--ink-soft);
+      font-size: 0.82rem;
+      font-style: italic;
+    }
+
+    .slots {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .slot {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      width: 100%;
+      text-align: left;
+      border: 1.5px dashed var(--line);
+      border-radius: var(--radius-md);
+      padding: 12px 16px;
+      background: rgba(0, 0, 0, 0.015);
+      min-height: 52px;
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.2s ease;
+    }
+
+    .slot.filled {
+      border-style: solid;
+      border-color: var(--line);
+      background: var(--panel-solid);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .slot.filled:hover:not(:disabled) {
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+    }
+
+    .slot.correct {
+      border-color: var(--good);
+      background: var(--good-soft);
+    }
+
+    .slot.incorrect {
+      border-color: var(--bad);
+      background: var(--bad-soft);
+    }
+
+    .slot:disabled {
+      cursor: default;
+    }
+
+    .slot .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      flex: none;
+      width: 22px;
+      padding-top: 2px;
+    }
+
+    .slot .txt .p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .slot .txt .a {
+      margin: 3px 0 0;
+      color: var(--ink-soft);
+      font-size: 0.82rem;
+      font-style: italic;
+    }
+
+    .slot .mark {
+      margin-left: auto;
+      font-weight: 700;
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+    }
+
+    .slot .mark.correct {
+      background: var(--good);
+      color: #fff;
+    }
+
+    .slot .mark.incorrect {
+      background: var(--bad);
+      color: #fff;
+    }
+
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 20px 0;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      min-height: 46px;
+      padding: 10px 22px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--primary);
+      background: var(--primary);
+      color: #fff;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--primary-hover);
+      border-color: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn.secondary {
+      background: var(--panel-solid);
+      color: var(--primary);
+      border-color: var(--primary-border);
+      box-shadow: none;
+    }
+
+    .btn.secondary:hover:not(:disabled) {
+      background: var(--primary-soft);
+      border-color: var(--primary);
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--ink-soft);
+      border-color: var(--line);
+      box-shadow: none;
+    }
+
+    .btn.ghost:hover:not(:disabled) {
+      background: rgba(0, 0, 0, 0.03);
+      color: var(--ink);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none !important;
+    }
+
+    /* Score banner */
+    .score-line {
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      margin: 14px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .score-line.good {
+      background: var(--good-soft);
+      color: var(--good);
+      border: 1px solid var(--good-border);
+    }
+
+    .score-line.bad {
+      background: var(--bad-soft);
+      color: var(--bad);
+      border: 1px solid var(--bad-border);
+    }
+
+    /* Tables */
+    .review {
+      margin-top: 24px;
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+    }
+
+    .review table,
+    .model-block table,
+    .clue-block table,
+    .proof-table,
+    .final-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 0.88rem;
+    }
+
+    .review th,
+    .model-block th,
+    .clue-block th,
+    .proof-table th,
+    .final-table th {
+      text-align: left;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--ink-muted);
+      padding: 10px 12px;
+      border-bottom: 1.5px solid var(--line);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .review td,
+    .model-block td,
+    .clue-block td,
+    .proof-table td,
+    .final-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    .review td.no,
+    .model-block td.no,
+    .clue-block td.no,
+    .proof-table td.no {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--ink-muted);
+      width: 32px;
+      font-weight: 600;
+    }
+
+    /* Practice mode textarea */
+    .proof-table textarea {
+      width: 100%;
+      min-height: 48px;
+      resize: vertical;
+      border: 1.5px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      background: var(--panel-solid);
+      color: var(--ink);
+      transition: all 0.2s ease;
+    }
+
+    .proof-table textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-soft);
+    }
+
+    .row-remove {
+      background: transparent;
+      border: none;
+      color: var(--bad);
+      cursor: pointer;
+      font-size: 1.2rem;
+      padding: 8px;
+      border-radius: 6px;
+      transition: background 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .row-remove:hover {
+      background: var(--bad-soft);
+    }
+
+    /* Model Block & Clue Block */
+    .model-block {
+      margin-top: 24px;
+      border: 1px solid var(--ochre-border);
+      background: var(--ochre-soft);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+
+    .model-block .section-title {
+      color: var(--ochre);
+    }
+
+    .model-block td {
+      background: transparent;
+    }
+
+    .tips {
+      background: var(--primary-soft);
+      border: 1px solid var(--primary-border);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin: 18px 0;
+    }
+
+    .tips p {
+      margin: 0 0 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .tips ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .tips li {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      margin-bottom: 4px;
+      line-height: 1.5;
+    }
+
+    /* Score Pills */
+    .score-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      flex: none;
+    }
+
+    .score-pill.high {
+      background: var(--good-soft);
+      color: var(--good);
+      border: 1px solid var(--good-border);
+    }
+
+    .score-pill.mid {
+      background: var(--ochre-soft);
+      color: var(--ochre);
+      border: 1px solid var(--ochre-border);
+    }
+
+    .score-pill.low {
+      background: var(--bad-soft);
+      color: var(--bad);
+      border: 1px solid var(--bad-border);
+    }
+
+    .rating-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 12px 0 6px;
+    }
+
+    .rating-btn {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      min-height: 40px;
+      padding: 8px 18px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--line);
+      background: var(--panel-solid);
+      color: var(--ink-soft);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .rating-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-soft);
+    }
+
+    /* Final Hero */
+    .final-hero {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      flex-wrap: wrap;
+      background: linear-gradient(135deg, var(--primary-soft) 0%, rgba(99, 102, 241, 0.02) 100%);
+      border: 1px solid var(--primary-border);
+      border-left: 6px solid var(--primary);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      margin-bottom: 28px;
+    }
+
+    .final-hero .big-score {
+      font-family: 'EB Garamond', serif;
+      font-weight: 700;
+      font-size: 3.6rem;
+      color: var(--primary);
+      line-height: 1;
+    }
+
+    .final-hero .big-score span {
+      font-size: 1.4rem;
+      color: var(--ink-soft);
+      font-weight: 400;
+    }
+
+    .final-hero .meta p {
+      margin: 0 0 6px;
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+    }
+
+    /* Clue budget */
+    .clue-budget {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--ochre);
+      background: var(--ochre-soft);
+      border: 1px solid var(--ochre-border);
+      border-radius: 999px;
+      padding: 5px 12px;
+    }
+
+    .hint-section {
+      margin-top: 24px;
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+    }
+
+    .hint-box {
+      background: var(--primary-soft);
+      border: 1px solid var(--primary-border);
+      border-left: 4px solid var(--primary);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      margin-bottom: 12px;
+    }
+
+    .hint-box .hint-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: block;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .hint-box p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    .clue-block {
+      background: var(--ochre-soft);
+      border: 1px solid var(--ochre-border);
+      border-left: 4px solid var(--ochre);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin-bottom: 12px;
+    }
+
+    .clue-block .section-title {
+      margin-bottom: 10px;
+      color: var(--ochre);
+    }
+
+    .clue-block td.gap {
+      color: var(--ink-muted);
+      font-style: italic;
+    }
+
+    .footer-note {
+      margin-top: 36px;
+      font-size: 0.82rem;
+      color: var(--ink-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script>
+    /* ---------------------------------------------------------------
+       I18N TRANSLATIONS
+    --------------------------------------------------------------- */
+    const I18N = {
+      id: {
+        headerBadge: "Bab I \u00b7 Fondasi Matematika",
+        headerTitle: "Analisis Riil (Pembuktian 3 Kolom)",
+        headerQuote: "\u201cMathematics is the art of giving the same name to different things.\u201d \u2014 Henri Poincar\u00e9. Latih penalaran Premis\u2013Alasan lewat teorema dan latihan interaktif.",
+        modeReorder: "Susun Ulang Bukti",
+        modePractice: "Latihan Mandiri",
+        modeFinal: "Nilai Akhir",
+        groups: {
+          "1.1": "1.1 Himpunan &amp; Fungsi",
+          "1.2": "1.2 Induksi Matematika",
+          "1.3": "1.3 Keterhitungan Himpunan"
+        },
+        badgeTheorem: "Teorema",
+        badgePractice: "Latihan Mandiri",
+        reorderPoolTitle: "Pilihan Langkah (Klik untuk menyusun)",
+        reorderPoolHint: "Pilih tiap langkah sesuai urutan logika pembuktian yang tepat. Klik langkah di bawah untuk membatalkan.",
+        reorderPoolEmpty: "Semua langkah sudah tersusun di kolom bawah.",
+        reorderSlotsTitle: "Urutan Konstruksi Bukti Anda",
+        reorderSlotEmpty: "Klik langkah di atas untuk mengisi posisi ini",
+        btnCheckReorder: "Periksa Urutan Bukti",
+        btnResetReorder: "Acak Ulang Langkah",
+        scorePerfect: " \u2014 Sempurna! Selamat!",
+        reviewTitle: "Bukti Lengkap Terverifikasi (Referensi)",
+        colNo: "No.",
+        colPremise: "Premis",
+        colReason: "Alasan",
+        practiceTipsTitle: "Petunjuk Pembuktian",
+        practiceWorksheetTitle: "Lembar Kerja Pembuktian Anda",
+        phPremise: "Tulis pernyataan/premis...",
+        phReason: "Tulis alasan/aturan yang dipakai...",
+        btnAddRow: "+ Tambah Baris",
+        btnShowModel: "Tampilkan Solusi Model",
+        btnHideModel: "Sembunyikan Solusi Model",
+        btnShowModelLocked: "🔒 Solusi Model Terkunci (Selesaikan &amp; Evaluasi Dulu)",
+        modelLockedTitle: "Solusi Model Referensi hanya dapat dibuka setelah Anda menandai selesai dan melakukan evaluasi mandiri.",
+        btnMarkDone: "Tandai Selesai &amp; Evaluasi",
+        btnDoneMarked: "Ditandai Selesai \u2014 Nilai ",
+        ratingPrompt: "Setelah membandingkan dengan solusi model, berikan evaluasi mandiri kelengkapan bukti Anda:",
+        rate40: "Perlu Perbaikan (40)",
+        rate60: "Cukup Lengkap (60)",
+        rate80: "Baik &amp; Runtut (80)",
+        rate100: "Sangat Sempurna (100)",
+        modelTitle: "Solusi Model Referensi",
+        helpTitle: "Butuh Bantuan Penalarannya?",
+        btnHint1: "Tampilkan Hint 1",
+        btnHint2: "Tampilkan Hint 2",
+        clueTitles: {
+          1: "Clue 1 \u2014 kerangka alasan (premis masih rumpang)",
+          2: "Clue 2 \u2014 sebagian premis sudah dilengkapi",
+          3: "Clue 3 \u2014 jawaban lengkap"
+        },
+        clueBtns: {
+          1: "Buka Clue 1 (Jawaban Rumpang)",
+          2: "Buka Clue 2 (Lengkapi Sebagian)",
+          3: "Buka Clue 3 (Solusi Lengkap)"
+        },
+        clueFillIn: "\u2026\u2026 (isi sendiri)",
+        allCluesRevealed: "Semua clue telah terbuka untuk soal ini",
+        clueBudgetExhausted: "Jatah clue sesi ini sudah habis (3/3 terpakai)",
+        remainingClues: "Sisa jatah clue: ",
+        finalSummaryTitle: "Ringkasan Hasil Belajar",
+        finalCompleted: "soal telah diselesaikan.",
+        finalAllDone: "Semua soal telah dikumpulkan \u2014 ini nilai akhir Anda!",
+        finalIncomplete: "Nilai akan diperbarui secara otomatis saat Anda menyelesaikan soal-soal lainnya.",
+        finalTableTitle: "Rincian Progres per Teorema",
+        finalColChapter: "Bab",
+        finalColProblem: "Soal Teorema / Latihan",
+        finalColStatus: "Status &amp; Nilai",
+        statusNotAttempted: "Belum dikerjakan",
+        footerNote: "Soal diacak ulang setiap kali halaman dimuat. Progres dan nilai tersimpan otomatis di perangkat ini."
+      },
+      en: {
+        headerBadge: "Chapter I \u00b7 Mathematical Foundations",
+        headerTitle: "Real Analysis (3-Column Proofs)",
+        headerQuote: "\u201cMathematics is the art of giving the same name to different things.\u201d \u2014 Henri Poincar\u00e9. Practice Premise\u2013Reason logic through interactive theorems and exercises.",
+        modeReorder: "Reorder Proof",
+        modePractice: "Self Practice",
+        modeFinal: "Final Score",
+        groups: {
+          "1.1": "1.1 Sets &amp; Functions",
+          "1.2": "1.2 Mathematical Induction",
+          "1.3": "1.3 Countability of Sets"
+        },
+        badgeTheorem: "Theorem",
+        badgePractice: "Self Practice",
+        reorderPoolTitle: "Step Pool (Click to construct)",
+        reorderPoolHint: "Select each step in the correct logical proof order. Click steps below to cancel.",
+        reorderPoolEmpty: "All steps have been placed in the slots below.",
+        reorderSlotsTitle: "Your Proof Construction Order",
+        reorderSlotEmpty: "Click a step above to fill this position",
+        btnCheckReorder: "Check Proof Order",
+        btnResetReorder: "Reset / Shuffle Steps",
+        scorePerfect: " \u2014 Perfect! Congratulations!",
+        reviewTitle: "Complete Verified Proof (Reference)",
+        colNo: "No.",
+        colPremise: "Premise",
+        colReason: "Reason",
+        practiceTipsTitle: "Proof Guidance",
+        practiceWorksheetTitle: "Your Proof Worksheet",
+        phPremise: "Write statement/premise...",
+        phReason: "Write reason/rule used...",
+        btnAddRow: "+ Add Row",
+        btnShowModel: "Show Model Solution",
+        btnHideModel: "Hide Model Solution",
+        btnShowModelLocked: "🔒 Model Solution Locked (Complete &amp; Evaluate First)",
+        modelLockedTitle: "Reference Model Solution can only be unlocked after marking as done and self-evaluating.",
+        btnMarkDone: "Mark as Done &amp; Evaluate",
+        btnDoneMarked: "Marked as Done \u2014 Score ",
+        ratingPrompt: "After comparing with the model solution, self-evaluate the completeness of your proof:",
+        rate40: "Needs Improvement (40)",
+        rate60: "Fairly Complete (60)",
+        rate80: "Good &amp; Coherent (80)",
+        rate100: "Excellent &amp; Complete (100)",
+        modelTitle: "Reference Model Solution",
+        helpTitle: "Need Help with the Reasoning?",
+        btnHint1: "Show Hint 1",
+        btnHint2: "Show Hint 2",
+        clueTitles: {
+          1: "Clue 1 \u2014 reason framework (premises fill-in)",
+          2: "Clue 2 \u2014 partial premises revealed",
+          3: "Clue 3 \u2014 complete solution"
+        },
+        clueBtns: {
+          1: "Unlock Clue 1 (Outline)",
+          2: "Unlock Clue 2 (Partial)",
+          3: "Unlock Clue 3 (Full Solution)"
+        },
+        clueFillIn: "\u2026\u2026 (fill in yourself)",
+        allCluesRevealed: "All clues revealed for this problem",
+        clueBudgetExhausted: "Session clue budget exhausted (3/3 used)",
+        remainingClues: "Remaining clue budget: ",
+        finalSummaryTitle: "Learning Summary",
+        finalCompleted: "problems completed.",
+        finalAllDone: "All problems completed \u2014 here is your final grade!",
+        finalIncomplete: "Scores will automatically update as you complete more problems.",
+        finalTableTitle: "Detailed Progress per Theorem",
+        finalColChapter: "Chapter",
+        finalColProblem: "Theorem Problem / Practice",
+        finalColStatus: "Status &amp; Score",
+        statusNotAttempted: "Not attempted yet",
+        footerNote: "Problems are randomized every time the page loads. Progress and scores are automatically saved on this device."
+      }
+    };
+
+    /* ---------------------------------------------------------------
+       DATA
+    --------------------------------------------------------------- */
+
+    const REORDER = [
+      {
+        id: "r1",
+        badge: "1.1",
+        title: "Hukum De Morgan (untuk selisih himpunan)",
+        title_en: "De Morgan's Law (for set difference)",
+        statement: "Jika A, B, C adalah himpunan, buktikan bahwa C \\ (A \u222a B) = (C \\ A) \u2229 (C \\ B).",
+        statement_en: "If A, B, C are sets, prove that C \\ (A \u222a B) = (C \\ A) \u2229 (C \\ B).",
+        rows: [
+          { p: "Asumsikan x \u2208 C \\ (A \u222a B)", a: "Asumsikan elemen sembarang di ruas kiri", p_en: "Assume x \u2208 C \\ (A \u222a B)", a_en: "Assume an arbitrary element in the left-hand side" },
+          { p: "x \u2208 C dan x \u2209 (A \u222a B)", a: "Definisi selisih himpunan", p_en: "x \u2208 C and x \u2209 (A \u222a B)", a_en: "Definition of set difference" },
+          { p: "x \u2208 C dan (x \u2209 A dan x \u2209 B)", a: "Definisi gabungan (negasi keanggotaan)", p_en: "x \u2208 C and (x \u2209 A and x \u2209 B)", a_en: "Definition of union (negation of membership)" },
+          { p: "(x \u2208 C dan x \u2209 A) dan (x \u2208 C dan x \u2209 B)", a: "Sifat distributif konjungsi", p_en: "(x \u2208 C and x \u2209 A) and (x \u2208 C and x \u2209 B)", a_en: "Distributive property of conjunction" },
+          { p: "x \u2208 (C\\A) dan x \u2208 (C\\B)", a: "Definisi selisih himpunan", p_en: "x \u2208 (C\\A) and x \u2208 (C\\B)", a_en: "Definition of set difference" },
+          { p: "x \u2208 (C\\A) \u2229 (C\\B)", a: "Definisi irisan", p_en: "x \u2208 (C\\A) \u2229 (C\\B)", a_en: "Definition of intersection" },
+          { p: "C\\(A\u222aB) \u2286 (C\\A)\u2229(C\\B)", a: "Inklusi arah pertama terbukti", p_en: "C\\(A\u222aB) \u2286 (C\\A)\u2229(C\\B)", a_en: "First directional inclusion proved" },
+          { p: "Asumsikan x \u2208 (C\\A) \u2229 (C\\B)", a: "Asumsikan elemen sembarang di ruas kanan", p_en: "Assume x \u2208 (C\\A) \u2229 (C\\B)", a_en: "Assume an arbitrary element in the right-hand side" },
+          { p: "x \u2208 (C\\A) dan x \u2208 (C\\B)", a: "Definisi irisan", p_en: "x \u2208 (C\\A) and x \u2208 (C\\B)", a_en: "Definition of intersection" },
+          { p: "(x\u2208C dan x\u2209A) dan (x\u2208C dan x\u2209B)", a: "Definisi selisih himpunan", p_en: "(x\u2208C and x\u2209A) and (x\u2208C and x\u2209B)", a_en: "Definition of set difference" },
+          { p: "x\u2208C dan x\u2209A dan x\u2209B", a: "Penyederhanaan konjungsi", p_en: "x\u2208C and x\u2209A and x\u2209B", a_en: "Simplification of conjunction" },
+          { p: "x\u2208C dan x\u2209(A\u222aB)", a: "Definisi gabungan (negasi keanggotaan)", p_en: "x\u2208C and x\u2209(A\u222aB)", a_en: "Definition of union (negation of membership)" },
+          { p: "x \u2208 C\\(A\u222aB)", a: "Definisi selisih himpunan", p_en: "x \u2208 C\\(A\u222aB)", a_en: "Definition of set difference" },
+          { p: "(C\\A)\u2229(C\\B) \u2286 C\\(A\u222aB)", a: "Inklusi arah kedua terbukti", p_en: "(C\\A)\u2229(C\\B) \u2286 C\\(A\u222aB)", a_en: "Second directional inclusion proved" },
+          { p: "C\\(A\u222aB) = (C\\A)\u2229(C\\B)", a: "Dua inklusi saling memuat \u21d2 kesamaan himpunan", p_en: "C\\(A\u222aB) = (C\\A)\u2229(C\\B)", a_en: "Mutual inclusion \u21d2 set equality" }
+        ]
+      },
+      {
+        id: "r2",
+        badge: "1.1",
+        title: "Eksistensi Fungsi Invers",
+        title_en: "Existence of Inverse Function",
+        statement: "Buktikan bahwa fungsi f: A \u2192 B memiliki fungsi invers jika dan hanya jika f bijektif.",
+        statement_en: "Prove that a function f: A \u2192 B has an inverse function if and only if f is bijective.",
+        rows: [
+          { p: "Asumsikan f bijektif", a: "Hipotesis (arah pertama)", p_en: "Assume f is bijective", a_en: "Hypothesis (first direction)" },
+          { p: "f injektif dan f surjektif", a: "Definisi bijektif", p_en: "f is injective and f is surjective", a_en: "Definition of bijective" },
+          { p: "Untuk setiap y \u2208 B, terdapat tepat satu x \u2208 A dengan f(x) = y", a: "Dari injektif dan surjektif", p_en: "For every y \u2208 B, there exists a unique x \u2208 A with f(x) = y", a_en: "From injectivity and surjectivity" },
+          { p: "Definisikan g: B \u2192 A dengan g(y) = x jika f(x) = y", a: "Konstruksi fungsi", p_en: "Define g: B \u2192 A by g(y) = x if f(x) = y", a_en: "Construction of function" },
+          { p: "g terdefinisi dengan baik pada seluruh B", a: "Dari ketunggalan pada langkah sebelumnya", p_en: "g is well-defined on all of B", a_en: "From uniqueness in previous step" },
+          { p: "g(f(x)) = x untuk semua x \u2208 A", a: "Definisi g", p_en: "g(f(x)) = x for all x \u2208 A", a_en: "Definition of g" },
+          { p: "f(g(y)) = y untuk semua y \u2208 B", a: "Definisi g", p_en: "f(g(y)) = y for all y \u2208 B", a_en: "Definition of g" },
+          { p: "g adalah fungsi invers dari f", a: "Dari dua identitas komposisi di atas", p_en: "g is the inverse function of f", a_en: "From the two composition identities above" },
+          { p: "Sebaliknya, asumsikan g = f\u207b\u00b9 ada", a: "Hipotesis (arah kedua)", p_en: "Conversely, assume g = f\u207b\u00b9 exists", a_en: "Hypothesis (second direction)" },
+          { p: "Untuk setiap y \u2208 B, x = g(y) memenuhi f(x) = y", a: "Dari eksistensi g", p_en: "For every y \u2208 B, x = g(y) satisfies f(x) = y", a_en: "From existence of g" },
+          { p: "f surjektif", a: "Dari langkah sebelumnya", p_en: "f is surjective", a_en: "From previous step" },
+          { p: "Jika f(x\u2081) = f(x\u2082), maka x\u2081 = g(f(x\u2081)) = g(f(x\u2082)) = x\u2082", a: "Menerapkan g pada kedua ruas", p_en: "If f(x\u2081) = f(x\u2082), then x\u2081 = g(f(x\u2081)) = g(f(x\u2082)) = x\u2082", a_en: "Applying g to both sides" },
+          { p: "f injektif", a: "Dari langkah sebelumnya", p_en: "f is injective", a_en: "From previous step" },
+          { p: "f bijektif", a: "f injektif dan surjektif sekaligus", p_en: "f is bijective", a_en: "f is both injective and surjective" }
+        ]
+      },
+      {
+        id: "r3",
+        badge: "1.2",
+        title: "Prinsip Induksi Matematika",
+        title_en: "Principle of Mathematical Induction",
+        statement: "Misalkan S \u2286 \u2115 dengan (1) 1 \u2208 S, dan (2) untuk setiap k, jika k \u2208 S maka k+1 \u2208 S. Buktikan S = \u2115.",
+        statement_en: "Let S \u2286 \u2115 with (1) 1 \u2208 S, and (2) for every k, if k \u2208 S then k+1 \u2208 S. Prove S = \u2115.",
+        rows: [
+          { p: "Asumsikan, demi kontradiksi, bahwa S \u2260 \u2115", a: "Pembuktian dengan kontradiksi", p_en: "Assume, for contradiction, that S \u2260 \u2115", a_en: "Proof by contradiction" },
+          { p: "\u2115 \\ S \u2260 \u2205", a: "Dari asumsi pada langkah sebelumnya", p_en: "\u2115 \\ S \u2260 \u2205", a_en: "From assumption in previous step" },
+          { p: "\u2115 \\ S memiliki elemen terkecil, sebut m", a: "Sifat Terurut Baik pada \u2115", p_en: "\u2115 \\ S has a least element, say m", a_en: "Well-Ordering Principle of \u2115" },
+          { p: "m \u2260 1", a: "Karena 1 \u2208 S (hipotesis 1), maka 1 \u2209 \u2115\\S", p_en: "m \u2260 1", a_en: "Since 1 \u2208 S (hypothesis 1), 1 \u2209 \u2115\\S" },
+          { p: "m > 1, sehingga m \u2212 1 \u2208 \u2115", a: "Karena m \u2208 \u2115 dan m \u2260 1", p_en: "m > 1, so m \u2212 1 \u2208 \u2115", a_en: "Since m \u2208 \u2115 and m \u2260 1" },
+          { p: "m \u2212 1 \u2209 \u2115\\S, artinya m \u2212 1 \u2208 S", a: "Karena m adalah elemen terkecil di \u2115\\S", p_en: "m \u2212 1 \u2209 \u2115\\S, meaning m \u2212 1 \u2208 S", a_en: "Since m is the least element in \u2115\\S" },
+          { p: "m \u2208 S", a: "Hipotesis 2 diterapkan pada k = m \u2212 1", p_en: "m \u2208 S", a_en: "Hypothesis 2 applied to k = m \u2212 1" },
+          { p: "Kontradiksi: m \u2208 S dan m \u2208 \u2115\\S sekaligus", a: "Dari langkah 3 dan langkah sebelumnya", p_en: "Contradiction: m \u2208 S and m \u2208 \u2115\\S simultaneously", a_en: "From step 3 and previous step" },
+          { p: "Asumsi S \u2260 \u2115 salah", a: "Kontradiksi menunjukkan asumsi awal keliru", p_en: "Assumption S \u2260 \u2115 is false", a_en: "Contradiction shows initial assumption is wrong" },
+          { p: "S = \u2115", a: "Kesimpulan", p_en: "S = \u2115", a_en: "Conclusion" }
+        ]
+      },
+      {
+        id: "r4",
+        badge: "1.2",
+        title: "Prinsip Induksi Kuat",
+        title_en: "Principle of Strong Induction",
+        statement: "Misalkan S \u2286 \u2115 dengan (1) 1 \u2208 S, dan (2) untuk setiap n, jika {1,2,...,n-1} \u2286 S maka n \u2208 S. Buktikan S = \u2115.",
+        statement_en: "Let S \u2286 \u2115 with (1) 1 \u2208 S, and (2) for every n, if {1,2,...,n-1} \u2286 S then n \u2208 S. Prove S = \u2115.",
+        rows: [
+          { p: "Definisikan T = \u2115 \\ S", a: "Konstruksi himpunan bantu", p_en: "Define T = \u2115 \\ S", a_en: "Construction of auxiliary set" },
+          { p: "Asumsikan, demi kontradiksi, T \u2260 \u2205", a: "Pembuktian dengan kontradiksi", p_en: "Assume, for contradiction, T \u2260 \u2205", a_en: "Proof by contradiction" },
+          { p: "T memiliki elemen terkecil, sebut m", a: "Sifat Terurut Baik pada \u2115", p_en: "T has a least element, say m", a_en: "Well-Ordering Principle of \u2115" },
+          { p: "Untuk semua k < m, k \u2209 T, artinya k \u2208 S", a: "Karena m adalah elemen terkecil di T", p_en: "For all k < m, k \u2209 T, meaning k \u2208 S", a_en: "Since m is the least element in T" },
+          { p: "{1, 2, ..., m\u22121} \u2286 S", a: "Dari langkah sebelumnya", p_en: "{1, 2, ..., m\u22121} \u2286 S", a_en: "From previous step" },
+          { p: "m \u2208 S", a: "Hipotesis 2 diterapkan pada langkah sebelumnya", p_en: "m \u2208 S", a_en: "Hypothesis 2 applied to previous step" },
+          { p: "Tetapi m \u2208 T berarti m \u2209 S", a: "Dari langkah 3 dan definisi T", p_en: "But m \u2208 T means m \u2209 S", a_en: "From step 3 and definition of T" },
+          { p: "Kontradiksi: m \u2208 S dan m \u2209 S", a: "Dari dua langkah sebelumnya", p_en: "Contradiction: m \u2208 S and m \u2209 S", a_en: "From previous two steps" },
+          { p: "Asumsi T \u2260 \u2205 salah, jadi T = \u2205", a: "Kontradiksi menunjukkan asumsi keliru", p_en: "Assumption T \u2260 \u2205 is false, so T = \u2205", a_en: "Contradiction shows assumption is wrong" },
+          { p: "T = \u2205 berarti \u2115 \\ S = \u2205", a: "Definisi T", p_en: "T = \u2205 means \u2115 \\ S = \u2205", a_en: "Definition of T" },
+          { p: "S = \u2115", a: "Kesimpulan", p_en: "S = \u2115", a_en: "Conclusion" }
+        ]
+      },
+      {
+        id: "r5",
+        badge: "1.3",
+        title: "\u2115 \u00d7 \u2115 adalah himpunan terhitung",
+        title_en: "\u2115 \u00d7 \u2115 is a Countable Set",
+        statement: "Buktikan bahwa himpunan \u2115 \u00d7 \u2115 adalah himpunan terhitung.",
+        statement_en: "Prove that the set \u2115 \u00d7 \u2115 is countable.",
+        rows: [
+          { p: "Urutkan pasangan (a,b) berdasarkan jumlah s = a+b", a: "Strategi pengurutan (pencacahan diagonal)", p_en: "Order pairs (a,b) based on the sum s = a+b", a_en: "Ordering strategy (diagonal enumeration)" },
+          { p: "Untuk pasangan dengan jumlah s yang sama, urutkan berdasarkan nilai a", a: "Pengurutan sekunder di dalam satu diagonal", p_en: "For pairs with the same sum s, order by the value of a", a_en: "Secondary ordering within one diagonal" },
+          { p: "Diperoleh urutan: (1,1),(1,2),(2,1),(1,3),(2,2),(3,1),...", a: "Hasil pengurutan diagonal", p_en: "The sequence obtained: (1,1),(1,2),(2,1),(1,3),(2,2),(3,1),...", a_en: "Diagonal ordering result" },
+          { p: "Banyaknya pasangan dengan jumlah lebih kecil dari s ada sebanyak (s\u22122)(s\u22121)/2", a: "Observasi kombinatorial pada tiap diagonal", p_en: "The number of pairs with sum less than s is (s\u22122)(s\u22121)/2", a_en: "Combinatorial observation on each diagonal" },
+          { p: "Posisi pasangan (a,b) dalam urutan dapat dihitung sebagai fungsi eksplisit dari a dan b", a: "Dari dua langkah sebelumnya", p_en: "The position of pair (a,b) in sequence can be computed as an explicit function of a and b", a_en: "From previous two steps" },
+          { p: "Definisikan f(a,b) sama dengan rumus posisi tersebut", a: "Konstruksi fungsi f: \u2115\u00d7\u2115 \u2192 \u2115", p_en: "Define f(a,b) equal to that position formula", a_en: "Construction of function f: \u2115\u00d7\u2115 \u2192 \u2115" },
+          { p: "Setiap pasangan (a,b) dipetakan ke bilangan asli yang berbeda", a: "Karena urutan diagonal tidak mengulang posisi", p_en: "Each pair (a,b) is mapped to a distinct natural number", a_en: "Since diagonal ordering does not repeat positions" },
+          { p: "Setiap bilangan asli n adalah bayangan dari suatu pasangan", a: "Karena diagonal mencakup semua pasangan tanpa batas", p_en: "Every natural number n is the image of some pair", a_en: "Since diagonals cover all pairs infinitely" },
+          { p: "f adalah bijeksi dari \u2115\u00d7\u2115 ke \u2115", a: "Dari dua langkah sebelumnya (injektif dan surjektif)", p_en: "f is a bijection from \u2115\u00d7\u2115 to \u2115", a_en: "From previous two steps (injective and surjective)" },
+          { p: "\u2115 \u00d7 \u2115 adalah himpunan terhitung", a: "Definisi himpunan terhitung", p_en: "\u2115 \u00d7 \u2115 is a countable set", a_en: "Definition of countable set" }
+        ]
+      }
+    ];
+
+    const PRACTICE = [
+      {
+        id: "p1",
+        badge: "1.1",
+        title: "Hukum De Morgan bagian (b)",
+        title_en: "De Morgan's Law part (b)",
+        statement: "Jika A, B, C adalah himpunan, buktikan bahwa C \\ (A \u2229 B) = (C \\ A) \u222a (C \\ B).",
+        statement_en: "If A, B, C are sets, prove that C \\ (A \u2229 B) = (C \\ A) \u222a (C \\ B).",
+        tips: [
+          "Bukti kesamaan dua himpunan biasanya dilakukan dua arah: \u2286 dan \u2287.",
+          "Gunakan definisi selisih himpunan (x\u2208C dan x\u2209...) dan negasi dari irisan/gabungan secara konsisten.",
+          "Perhatikan bahwa negasi dari 'x \u2208 A \u2229 B' adalah 'x \u2209 A atau x \u2209 B' (bukan 'dan')."
+        ],
+        tips_en: [
+          "Proving equality of two sets is usually done in two directions: \u2286 and \u2287.",
+          "Use definition of set difference (x\u2208C and x\u2209...) and negation of intersection/union consistently.",
+          "Note that negation of 'x \u2208 A \u2229 B' is 'x \u2209 A or x \u2209 B' (not 'and')."
+        ],
+        hint1: "Ingat: negasi dari sebuah irisan (\u2229) menghasilkan pernyataan 'atau', bukan 'dan' \u2014 ini kebalikan dari negasi gabungan (\u222a).",
+        hint1_en: "Remember: the negation of an intersection (\u2229) yields an 'or' statement, not 'and' \u2014 this is the reverse of negating a union (\u222a).",
+        hint2: "Struktur buktinya simetris dengan pembuktian De Morgan bagian (a) yang ada di mode Susun Ulang Bukti \u2014 coba bandingkan urutan definisi yang dipakai di sana.",
+        hint2_en: "The proof structure is symmetric to De Morgan part (a) in Reorder Proof mode \u2014 compare the sequence of definitions used there.",
+        model: [
+          { p: "Asumsikan x \u2208 C \\ (A \u2229 B)", a: "Asumsikan elemen di ruas kiri", p_en: "Assume x \u2208 C \\ (A \u2229 B)", a_en: "Assume element in left-hand side" },
+          { p: "x \u2208 C dan x \u2209 (A \u2229 B)", a: "Definisi selisih himpunan", p_en: "x \u2208 C and x \u2209 (A \u2229 B)", a_en: "Definition of set difference" },
+          { p: "x \u2208 C dan (x \u2209 A atau x \u2209 B)", a: "Definisi irisan (negasi)", p_en: "x \u2208 C and (x \u2209 A or x \u2209 B)", a_en: "Definition of intersection (negation)" },
+          { p: "(x\u2208C dan x\u2209A) atau (x\u2208C dan x\u2209B)", a: "Sifat distributif konjungsi atas disjungsi", p_en: "(x\u2208C and x\u2209A) or (x\u2208C and x\u2209B)", a_en: "Distributive law of conjunction over disjunction" },
+          { p: "x \u2208 (C\\A) atau x \u2208 (C\\B)", a: "Definisi selisih himpunan", p_en: "x \u2208 (C\\A) or x \u2208 (C\\B)", a_en: "Definition of set difference" },
+          { p: "x \u2208 (C\\A) \u222a (C\\B)", a: "Definisi gabungan", p_en: "x \u2208 (C\\A) \u222a (C\\B)", a_en: "Definition of union" },
+          { p: "C\\(A\u2229B) \u2286 (C\\A)\u222a(C\\B)", a: "Inklusi arah pertama", p_en: "C\\(A\u2229B) \u2286 (C\\A)\u222a(C\\B)", a_en: "First directional inclusion" },
+          { p: "Langkah-langkah di atas dapat dibalik satu per satu", a: "Karena setiap definisi yang dipakai bersifat dua arah (jika dan hanya jika)", p_en: "The above steps can be reversed one by one", a_en: "Because each definition used is bi-directional (if and only if)" },
+          { p: "(C\\A)\u222a(C\\B) \u2286 C\\(A\u2229B)", a: "Inklusi arah kedua", p_en: "(C\\A)\u222a(C\\B) \u2286 C\\(A\u2229B)", a_en: "Second directional inclusion" },
+          { p: "C\\(A\u2229B) = (C\\A)\u222a(C\\B)", a: "Dua inklusi saling memuat", p_en: "C\\(A\u2229B) = (C\\A)\u222a(C\\B)", a_en: "Mutual inclusion" }
+        ]
+      },
+      {
+        id: "p2",
+        badge: "1.1",
+        title: "Komposisi dua bijeksi adalah bijeksi",
+        title_en: "Composition of Two Bijections is a Bijection",
+        statement: "Jika f: A \u2192 B bijektif dan g: B \u2192 C bijektif, tunjukkan bahwa g \u2218 f: A \u2192 C juga bijektif.",
+        statement_en: "If f: A \u2192 B is bijective and g: B \u2192 C is bijective, show that g \u2218 f: A \u2192 C is also bijective.",
+        tips: [
+          "Pisahkan pembuktian menjadi dua bagian: (g\u2218f) injektif, lalu (g\u2218f) surjektif.",
+          "Untuk injektif: mulai dari (g\u2218f)(x\u2081) = (g\u2218f)(x\u2082) dan gunakan injektivitas g lalu f.",
+          "Untuk surjektif: mulai dari sembarang z \u2208 C, gunakan surjektivitas g lalu f untuk menemukan pra-bayangan di A."
+        ],
+        tips_en: [
+          "Split the proof into two parts: (g\u2218f) is injective, then (g\u2218f) is surjective.",
+          "For injectivity: start with (g\u2218f)(x\u2081) = (g\u2218f)(x\u2082) and use injectivity of g then f.",
+          "For surjectivity: start with arbitrary z \u2208 C, use surjectivity of g then f to find pre-image in A."
+        ],
+        hint1: "Pisahkan pembuktian menjadi dua blok independen: satu blok murni untuk injektif, satu blok murni untuk surjektif.",
+        hint1_en: "Divide the proof into two independent blocks: one purely for injectivity, one purely for surjectivity.",
+        hint2: "Untuk blok surjektif, jangan mulai dari x \u2208 A \u2014 mulai dari elemen sembarang di kodomain z \u2208 C, lalu telusuri mundur melalui g lalu f.",
+        hint2_en: "For the surjectivity block, do not start from x \u2208 A \u2014 start from an arbitrary element in the codomain z \u2208 C, then trace backward through g then f.",
+        model: [
+          { p: "Asumsikan (g\u2218f)(x\u2081) = (g\u2218f)(x\u2082)", a: "Untuk menunjukkan injektif", p_en: "Assume (g\u2218f)(x\u2081) = (g\u2218f)(x\u2082)", a_en: "To show injectivity" },
+          { p: "g(f(x\u2081)) = g(f(x\u2082))", a: "Definisi komposisi fungsi", p_en: "g(f(x\u2081)) = g(f(x\u2082))", a_en: "Definition of function composition" },
+          { p: "f(x\u2081) = f(x\u2082)", a: "g injektif", p_en: "f(x\u2081) = f(x\u2082)", a_en: "g is injective" },
+          { p: "x\u2081 = x\u2082", a: "f injektif", p_en: "x\u2081 = x\u2082", a_en: "f is injective" },
+          { p: "g\u2218f injektif", a: "Dari empat langkah di atas", p_en: "g\u2218f is injective", a_en: "From the four steps above" },
+          { p: "Ambil sembarang z \u2208 C", a: "Untuk menunjukkan surjektif", p_en: "Take arbitrary z \u2208 C", a_en: "To show surjectivity" },
+          { p: "Terdapat y \u2208 B dengan g(y) = z", a: "g surjektif", p_en: "There exists y \u2208 B with g(y) = z", a_en: "g is surjective" },
+          { p: "Terdapat x \u2208 A dengan f(x) = y", a: "f surjektif", p_en: "There exists x \u2208 A with f(x) = y", a_en: "f is surjective" },
+          { p: "(g\u2218f)(x) = g(f(x)) = g(y) = z", a: "Definisi komposisi fungsi", p_en: "(g\u2218f)(x) = g(f(x)) = g(y) = z", a_en: "Definition of function composition" },
+          { p: "g\u2218f surjektif", a: "Dari tiga langkah di atas", p_en: "g\u2218f is surjective", a_en: "From the three steps above" },
+          { p: "g\u2218f bijektif", a: "g\u2218f injektif dan surjektif sekaligus", p_en: "g\u2218f is bijective", a_en: "g\u2218f is both injective and surjective" }
+        ]
+      },
+      {
+        id: "p3",
+        badge: "1.2",
+        title: "Jumlah kuadrat pertama",
+        title_en: "Sum of First Squares",
+        statement: "Buktikan dengan induksi bahwa untuk semua n \u2208 \u2115: 1\u00b2 + 2\u00b2 + ... + n\u00b2 = n(n+1)(2n+1)/6.",
+        statement_en: "Prove by induction that for all n \u2208 \u2115: 1\u00b2 + 2\u00b2 + ... + n\u00b2 = n(n+1)(2n+1)/6.",
+        tips: [
+          "Basis induksi: cek untuk n=1, kedua ruas sama dengan 1.",
+          "Hipotesis induksi: asumsikan rumus benar untuk n=k.",
+          "Langkah induksi: tambahkan (k+1)\u00b2 ke kedua ruas, lalu sederhanakan ruas kanan menjadi bentuk rumus untuk n=k+1."
+        ],
+        tips_en: [
+          "Base case: check for n=1, both sides equal 1.",
+          "Inductive hypothesis: assume the formula holds for n=k.",
+          "Inductive step: add (k+1)\u00b2 to both sides, then simplify the right side into the formula form for n=k+1."
+        ],
+        hint1: "Setelah menambahkan (k+1)\u00b2 ke kedua ruas, faktorkan (k+1) sesegera mungkin sebelum menyamakan penyebut \u2014 ini akan menyederhanakan aljabar Anda.",
+        hint1_en: "After adding (k+1)\u00b2 to both sides, factor out (k+1) as early as possible before finding a common denominator \u2014 this simplifies your algebra.",
+        hint2: "Bentuk kuadrat 2k\u00b2+7k+6 yang muncul di tengah pembuktian bisa difaktorkan menjadi (k+2)(2k+3) \u2014 cek dengan mengalikannya kembali.",
+        hint2_en: "The quadratic expression 2k\u00b2+7k+6 in the middle of proof factors as (k+2)(2k+3) \u2014 check by multiplying back out.",
+        model: [
+          { p: "Untuk n=1: ruas kiri = 1, ruas kanan = 1\u00b72\u00b73/6 = 1", a: "Basis induksi terverifikasi", p_en: "For n=1: LHS = 1, RHS = 1\u00b72\u00b73/6 = 1", a_en: "Base case verified" },
+          { p: "Asumsikan 1\u00b2+2\u00b2+...+k\u00b2 = k(k+1)(2k+1)/6 untuk suatu k", a: "Hipotesis induksi", p_en: "Assume 1\u00b2+2\u00b2+...+k\u00b2 = k(k+1)(2k+1)/6 for some k", a_en: "Inductive hypothesis" },
+          { p: "1\u00b2+2\u00b2+...+k\u00b2+(k+1)\u00b2 = k(k+1)(2k+1)/6 + (k+1)\u00b2", a: "Tambahkan suku ke-(k+1) pada kedua ruas", p_en: "1\u00b2+2\u00b2+...+k\u00b2+(k+1)\u00b2 = k(k+1)(2k+1)/6 + (k+1)\u00b2", a_en: "Add (k+1)-th term to both sides" },
+          { p: "= (k+1)[k(2k+1)/6 + (k+1)]", a: "Faktorkan (k+1) dari kedua suku", p_en: "= (k+1)[k(2k+1)/6 + (k+1)]", a_en: "Factor out (k+1) from both terms" },
+          { p: "= (k+1)[k(2k+1) + 6(k+1)]/6", a: "Samakan penyebut", p_en: "= (k+1)[k(2k+1) + 6(k+1)]/6", a_en: "Common denominator" },
+          { p: "= (k+1)(2k\u00b2+7k+6)/6", a: "Kalikan dan gabungkan suku sejenis", p_en: "= (k+1)(2k\u00b2+7k+6)/6", a_en: "Expand and combine like terms" },
+          { p: "= (k+1)(k+2)(2k+3)/6", a: "Faktorkan bentuk kuadrat 2k\u00b2+7k+6", p_en: "= (k+1)(k+2)(2k+3)/6", a_en: "Factor quadratic 2k\u00b2+7k+6" },
+          { p: "Ini adalah rumus untuk n=k+1", a: "Bandingkan dengan bentuk (n)(n+1)(2n+1)/6 pada n=k+1", p_en: "This is the formula for n=k+1", a_en: "Compare with (n)(n+1)(2n+1)/6 at n=k+1" },
+          { p: "Rumus benar untuk semua n \u2208 \u2115", a: "Prinsip Induksi Matematika", p_en: "Formula holds for all n \u2208 \u2115", a_en: "Principle of Mathematical Induction" }
+        ]
+      },
+      {
+        id: "p4",
+        badge: "1.2",
+        title: "n\u00b3 \u2212 n habis dibagi 3",
+        title_en: "n\u00b3 \u2212 n is Divisible by 3",
+        statement: "Buktikan dengan induksi bahwa untuk semua n \u2208 \u2115, bilangan n\u00b3 \u2212 n habis dibagi 3.",
+        statement_en: "Prove by induction that for all n \u2208 \u2115, the number n\u00b3 \u2212 n is divisible by 3.",
+        tips: [
+          "Basis induksi: n=1 memberi 1\u00b3\u22121 = 0, yang habis dibagi 3.",
+          "Pada langkah induksi, tulis (k+1)\u00b3\u2212(k+1) dan kelompokkan agar memuat suku k\u00b3\u2212k.",
+          "Gunakan hipotesis induksi untuk menggantikan k\u00b3\u2212k dengan 3m."
+        ],
+        tips_en: [
+          "Base case: n=1 gives 1\u00b3\u22121 = 0, which is divisible by 3.",
+          "In the inductive step, write (k+1)\u00b3\u2212(k+1) and group it to contain the term k\u00b3\u2212k.",
+          "Use the inductive hypothesis to replace k\u00b3\u2212k with 3m."
+        ],
+        hint1: "Ekspansi (k+1)\u00b3 akan menghasilkan suku k\u00b3, jadi susun ulang supaya (k+1)\u00b3-(k+1) memuat suku (k\u00b3-k) secara eksplisit.",
+        hint1_en: "Expanding (k+1)\u00b3 produces a k\u00b3 term, so rearrange (k+1)\u00b3-(k+1) to contain (k\u00b3-k) explicitly.",
+        hint2: "Setelah mengeluarkan (k\u00b3-k), sisa suku yang tertinggal (3k\u00b2+3k) sudah otomatis kelipatan 3 \u2014 tidak perlu hipotesis induksi lagi untuk bagian ini.",
+        hint2_en: "After isolating (k\u00b3-k), the remaining terms (3k\u00b2+3k) are automatically multiples of 3 \u2014 no induction hypothesis needed for this part.",
+        model: [
+          { p: "Untuk n=1: 1\u00b3\u22121 = 0 = 3\u00b70", a: "Basis induksi (0 habis dibagi 3)", p_en: "For n=1: 1\u00b3\u22121 = 0 = 3\u00b70", a_en: "Base case (0 is divisible by 3)" },
+          { p: "Asumsikan k\u00b3\u2212k = 3m untuk suatu bilangan bulat m", a: "Hipotesis induksi", p_en: "Assume k\u00b3\u2212k = 3m for some integer m", a_en: "Inductive hypothesis" },
+          { p: "(k+1)\u00b3\u2212(k+1) = k\u00b3+3k\u00b2+3k+1\u2212k\u22121", a: "Ekspansi (k+1)\u00b3 dan penyederhanaan", p_en: "(k+1)\u00b3\u2212(k+1) = k\u00b3+3k\u00b2+3k+1\u2212k\u22121", a_en: "Expansion of (k+1)\u00b3 and simplification" },
+          { p: "= (k\u00b3\u2212k) + 3k\u00b2+3k", a: "Kelompokkan agar memuat k\u00b3\u2212k", p_en: "= (k\u00b3\u2212k) + 3k\u00b2+3k", a_en: "Group to contain k\u00b3\u2212k" },
+          { p: "= 3m + 3(k\u00b2+k)", a: "Substitusi hipotesis induksi", p_en: "= 3m + 3(k\u00b2+k)", a_en: "Substitute inductive hypothesis" },
+          { p: "= 3(m+k\u00b2+k)", a: "Faktorkan 3", p_en: "= 3(m+k\u00b2+k)", a_en: "Factor out 3" },
+          { p: "(k+1)\u00b3\u2212(k+1) habis dibagi 3", a: "Karena berbentuk 3 dikali bilangan bulat", p_en: "(k+1)\u00b3\u2212(k+1) is divisible by 3", a_en: "Since it has the form 3 times an integer" },
+          { p: "Pernyataan benar untuk semua n \u2208 \u2115", a: "Prinsip Induksi Matematika", p_en: "Statement holds for all n \u2208 \u2115", a_en: "Principle of Mathematical Induction" }
+        ]
+      },
+      {
+        id: "p5",
+        badge: "1.3",
+        title: "Gabungan dua himpunan terhitung",
+        title_en: "Union of Two Countable Sets",
+        statement: "Buktikan bahwa jika A dan B adalah himpunan terhitung, maka A \u222a B juga terhitung.",
+        statement_en: "Prove that if A and B are countable sets, then A \u222a B is also countable.",
+        tips: [
+          "Pisahkan menjadi kasus: keduanya berhingga, salah satu tak hingga, atau keduanya tak hingga.",
+          "Untuk himpunan terhitung tak hingga, gunakan enumerasi (barisan) a\u2081, a\u2082, ... dan b\u2081, b\u2082, ...",
+          "Cukup tunjukkan cara menyisipkan (interleave) kedua enumerasi menjadi satu enumerasi untuk A\u222aB."
+        ],
+        tips_en: [
+          "Divide into cases: both finite, one infinite, or both infinite.",
+          "For countably infinite sets, use enumerations (sequences) a\u2081, a\u2082, ... and b\u2081, b\u2082, ...",
+          "Simply show how to interleave the two enumerations into a single enumeration for A\u222aB."
+        ],
+        hint1: "Kasus paling mudah untuk dibuktikan dulu adalah ketika A dan B saling lepas (tidak beririsan) \u2014 kasus umum bisa direduksi ke sini.",
+        hint1_en: "The easiest case to prove first is when A and B are disjoint (do not intersect) \u2014 the general case reduces to this.",
+        hint2: "Untuk menyisipkan (interleave) dua barisan tak hingga menjadi satu barisan, gunakan aturan berbeda untuk posisi ganjil dan genap pada domain \u2115.",
+        hint2_en: "To interleave two infinite sequences into one, use different rules for odd and even positions on domain \u2115.",
+        model: [
+          { p: "Jika A atau B kosong, hasil langsung mengikuti dari himpunan yang lain", a: "Kasus trivial", p_en: "If A or B is empty, the result follows directly from the other set", a_en: "Trivial case" },
+          { p: "Misalkan A dan B keduanya terhitung tak hingga dan saling lepas", a: "Kasus utama (kasus umum direduksi ke sini dengan A\u222aB=A\u222a(B\\A))", p_en: "Suppose A and B are both countably infinite and disjoint", a_en: "Main case (general case reduces here via A\u222aB=A\u222a(B\\A))" },
+          { p: "Terdapat enumerasi A = {a\u2081,a\u2082,a\u2083,...} dan B = {b\u2081,b\u2082,b\u2083,...}", a: "Definisi himpunan terhitung tak hingga", p_en: "There exist enumerations A = {a\u2081,a\u2082,a\u2083,...} and B = {b\u2081,b\u2082,b\u2083,...}", a_en: "Definition of countably infinite set" },
+          { p: "Definisikan f: \u2115 \u2192 A\u222aB dengan f(2n\u22121)=a\u2099 dan f(2n)=b\u2099", a: "Konstruksi enumerasi gabungan (interleaving)", p_en: "Define f: \u2115 \u2192 A\u222aB by f(2n\u22121)=a\u2099 and f(2n)=b\u2099", a_en: "Construction of interleaved enumeration" },
+          { p: "Setiap elemen A\u222aB muncul tepat satu kali pada barisan f", a: "Karena A,B saling lepas dan enumerasi masing-masing lengkap", p_en: "Every element of A\u222aB appears exactly once in sequence f", a_en: "Since A,B are disjoint and enumerations are complete" },
+          { p: "f adalah bijeksi dari \u2115 ke A\u222aB", a: "Dari langkah sebelumnya", p_en: "f is a bijection from \u2115 to A\u222aB", a_en: "From previous step" },
+          { p: "A \u222a B terhitung", a: "Definisi himpunan terhitung", p_en: "A \u222a B is countable", a_en: "Definition of countable set" }
+        ]
+      },
+      {
+        id: "p6",
+        badge: "1.3",
+        title: "Hasil kali Kartesian dari dua himpunan terhitung",
+        title_en: "Cartesian Product of Two Countable Sets",
+        statement: "Jika A dan B adalah himpunan terhitung, buktikan bahwa A \u00d7 B adalah himpunan terhitung.",
+        statement_en: "If A and B are countable sets, prove that A \u00d7 B is a countable set.",
+        tips: [
+          "Gunakan hasil bahwa \u2115 \u00d7 \u2115 terhitung (lihat mode Susun Ulang Bukti) sebagai batu loncatan.",
+          "Karena A dan B terhitung, masing-masing dapat dipetakan secara bijektif atau injektif ke \u2115.",
+          "Gabungkan kedua pemetaan menjadi satu pemetaan dari A\u00d7B ke \u2115\u00d7\u2115."
+        ],
+        tips_en: [
+          "Use the result that \u2115 \u00d7 \u2115 is countable (see Reorder Proof mode) as a stepping stone.",
+          "Since A and B are countable, each can be mapped bijectively or injectively to \u2115.",
+          "Combine both mappings into a single mapping from A\u00d7B to \u2115\u00d7\u2115."
+        ],
+        hint1: "Anda tidak perlu membangun bijeksi langsung dari A\u00d7B \u2014 cukup tunjukkan adanya pemetaan injektif ke suatu himpunan yang sudah diketahui terhitung.",
+        hint1_en: "You do not need to build a direct bijection from A\u00d7B \u2014 simply show the existence of an injective mapping to a set already known to be countable.",
+        hint2: "Manfaatkan hasil \u2115\u00d7\u2115 terhitung (ada di mode Susun Ulang Bukti) sebagai target dari pemetaan injektif Anda.",
+        hint2_en: "Use the fact that \u2115\u00d7\u2115 is countable (available in Reorder Proof mode) as the target of your injection.",
+        model: [
+          { p: "Karena A terhitung, terdapat injeksi g: A \u2192 \u2115", a: "Definisi himpunan terhitung", p_en: "Since A is countable, there exists an injection g: A \u2192 \u2115", a_en: "Definition of countable set" },
+          { p: "Karena B terhitung, terdapat injeksi h: B \u2192 \u2115", a: "Definisi himpunan terhitung", p_en: "Since B is countable, there exists an injection h: B \u2192 \u2115", a_en: "Definition of countable set" },
+          { p: "Definisikan F: A\u00d7B \u2192 \u2115\u00d7\u2115 dengan F(a,b) = (g(a), h(b))", a: "Konstruksi fungsi gabungan", p_en: "Define F: A\u00d7B \u2192 \u2115\u00d7\u2115 by F(a,b) = (g(a), h(b))", a_en: "Construction of combined function" },
+          { p: "Jika F(a\u2081,b\u2081) = F(a\u2082,b\u2082), maka g(a\u2081)=g(a\u2082) dan h(b\u2081)=h(b\u2082)", a: "Definisi kesamaan pasangan terurut", p_en: "If F(a\u2081,b\u2081) = F(a\u2082,b\u2082), then g(a\u2081)=g(a\u2082) and h(b\u2081)=h(b\u2082)", a_en: "Definition of ordered pair equality" },
+          { p: "a\u2081=a\u2082 dan b\u2081=b\u2082 karena g, h injektif", a: "Sifat injeksi", p_en: "a\u2081=a\u2082 and b\u2081=b\u2082 because g, h are injective", a_en: "Property of injections" },
+          { p: "F injektif", a: "Dari langkah sebelumnya", p_en: "F is injective", a_en: "From previous step" },
+          { p: "\u2115\u00d7\u2115 terhitung, sehingga setiap himpunan bagiannya terhitung", a: "Hasil sebelumnya + teorema himpunan bagian dari himpunan terhitung", p_en: "\u2115\u00d7\u2115 is countable, so any subset of it is countable", a_en: "Previous result + subset of countable set theorem" },
+          { p: "A\u00d7B dapat dipetakan injektif ke suatu himpunan terhitung, sehingga A\u00d7B terhitung", a: "Kesimpulan", p_en: "A\u00d7B can be mapped injectively to a countable set, hence A\u00d7B is countable", a_en: "Conclusion" }
+        ]
+      }
+    ];
+
+    /* ---------------------------------------------------------------
+       STATE
+    --------------------------------------------------------------- */
+    let state = {
+      mode: "reorder",          // "reorder" | "practice" | "final"
+      theme: "dark",            // "dark" | "light"
+      lang: "id",               // "id" | "en"
+      activeId: REORDER[0].id,
+      order: { reorder: [], practice: [] },
+      pool: [],
+      chosen: [],
+      checked: false,
+      practiceRows: {},
+      showModel: {},
+      rating: {},
+      progress: { reorder: {}, practice: {} },
+      hintStage: {},
+      clueStage: {},
+      clueUsedTotal: 0
+    };
+
+    function t(key) {
+      return (I18N[state.lang] && I18N[state.lang][key]) || I18N.id[key] || "";
+    }
+
+    function getItemTitle(item) {
+      if (state.lang === "en" && item.title_en) return item.title_en;
+      return item.title;
+    }
+
+    function getItemStatement(item) {
+      if (state.lang === "en" && item.statement_en) return item.statement_en;
+      return item.statement;
+    }
+
+    function getItemRows(problem) {
+      return problem.rows.map(r => ({
+        p: (state.lang === "en" && r.p_en) ? r.p_en : r.p,
+        a: (state.lang === "en" && r.a_en) ? r.a_en : r.a
+      }));
+    }
+
+    function getItemTips(problem) {
+      if (state.lang === "en" && problem.tips_en) return problem.tips_en;
+      return problem.tips;
+    }
+
+    function getItemHint1(problem) {
+      if (state.lang === "en" && problem.hint1_en) return problem.hint1_en;
+      return problem.hint1;
+    }
+
+    function getItemHint2(problem) {
+      if (state.lang === "en" && problem.hint2_en) return problem.hint2_en;
+      return problem.hint2;
+    }
+
+    function getItemModel(problem) {
+      return problem.model.map(r => ({
+        p: (state.lang === "en" && r.p_en) ? r.p_en : r.p,
+        a: (state.lang === "en" && r.a_en) ? r.a_en : r.a
+      }));
+    }
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function rollProblemOrder() {
+      state.order.reorder = shuffle(REORDER.map(r => r.id));
+      state.order.practice = shuffle(PRACTICE.map(p => p.id));
+    }
+
+    function orderedReorderList() {
+      return state.order.reorder.map(id => REORDER.find(r => r.id === id));
+    }
+    function orderedPracticeList() {
+      return state.order.practice.map(id => PRACTICE.find(p => p.id === id));
+    }
+
+    function currentReorderProblem() {
+      return REORDER.find(r => r.id === state.activeId);
+    }
+    function currentPracticeProblem() {
+      return PRACTICE.find(p => p.id === state.activeId);
+    }
+
+    function resetReorder(problem) {
+      state.pool = shuffle(problem.rows.map((_, i) => i));
+      state.chosen = [];
+      state.checked = false;
+    }
+
+    function ensurePracticeRows(problem) {
+      if (!state.practiceRows[problem.id]) {
+        state.practiceRows[problem.id] = [{ p: "", a: "" }, { p: "", a: "" }, { p: "", a: "" }];
+      }
+    }
+
+    function scoreClass(score) {
+      if (score >= 80) return "high";
+      if (score >= 50) return "mid";
+      return "low";
+    }
+
+    /* ---------------------------------------------------------------
+       CLUE CONTENT BUILDER
+    --------------------------------------------------------------- */
+    function buildClueRows(problem, level) {
+      const model = getItemModel(problem);
+      if (level === 1) {
+        return model.map(r => ({ p: null, a: r.a }));
+      }
+      if (level === 2) {
+        const half = Math.ceil(model.length / 2);
+        return model.map((r, i) => ({ p: i < half ? r.p : null, a: r.a }));
+      }
+      return model.map(r => ({ p: r.p, a: r.a }));
+    }
+
+    function renderClueContent(problem, level) {
+      const rows = buildClueRows(problem, level);
+      const titleMap = I18N[state.lang].clueTitles;
+      const fillText = t("clueFillIn");
+      return `<div class="clue-block">
+    <p class="section-title">${titleMap[level]}</p>
+    <table><thead><tr><th>${t("colNo")}</th><th>${t("colPremise")}</th><th>${t("colReason")}</th></tr></thead><tbody>
+      ${rows.map((r, i) => `<tr><td class="no">${i + 1}</td><td class="${r.p === null ? 'gap' : ''}">${r.p === null ? fillText : esc(r.p)}</td><td>${esc(r.a)}</td></tr>`).join("")}
+    </tbody></table>
+  </div>`;
+    }
+
+    /* ---------------------------------------------------------------
+       PERSISTENCE
+    --------------------------------------------------------------- */
+    async function loadProgress() {
+      try {
+        const res = await window.storage.get("proof-progress-v1", false);
+        if (res && res.value) {
+          const parsed = JSON.parse(res.value);
+          state.progress = Object.assign({ reorder: {}, practice: {} }, parsed);
+        }
+      } catch (e) { }
+      try {
+        const savedTheme = localStorage.getItem("proof-theme");
+        if (savedTheme) state.theme = savedTheme;
+      } catch (e) { }
+      try {
+        const savedLang = localStorage.getItem("proof-lang");
+        if (savedLang && (savedLang === "id" || savedLang === "en")) state.lang = savedLang;
+      } catch (e) { }
+    }
+
+    async function saveProgress() {
+      try {
+        await window.storage.set("proof-progress-v1", JSON.stringify(state.progress), false);
+      } catch (e) { }
+    }
+
+    function toggleTheme() {
+      state.theme = state.theme === "dark" ? "light" : "dark";
+      document.documentElement.setAttribute("data-theme", state.theme);
+      try {
+        localStorage.setItem("proof-theme", state.theme);
+      } catch (e) { }
+      render();
+    }
+
+    function toggleLang() {
+      state.lang = state.lang === "id" ? "en" : "id";
+      document.documentElement.setAttribute("lang", state.lang);
+      try {
+        localStorage.setItem("proof-lang", state.lang);
+      } catch (e) { }
+      render();
+    }
+
+    /* ---------------------------------------------------------------
+       RENDER
+    --------------------------------------------------------------- */
+    function esc(s) {
+      if (s === null || s === undefined) return "";
+      return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function render() {
+      document.documentElement.setAttribute("data-theme", state.theme);
+      document.documentElement.setAttribute("lang", state.lang);
+      const app = document.getElementById("app");
+
+      const sunIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
+      const moonIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+      const globIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`;
+
+      const iconReorder = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`;
+      const iconPractice = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+      const iconFinal = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>`;
+
+      const modeSwitchHTML = `
+    <div class="mode-switch">
+      <button class="mode-btn ${state.mode === 'reorder' ? 'active' : ''}" data-mode="reorder">${iconReorder} ${t('modeReorder')}</button>
+      <button class="mode-btn ${state.mode === 'practice' ? 'active' : ''}" data-mode="practice">${iconPractice} ${t('modePractice')}</button>
+      <button class="mode-btn ${state.mode === 'final' ? 'active' : ''}" data-mode="final">${iconFinal} ${t('modeFinal')}</button>
+    </div>
+  `;
+
+      let bodyHTML;
+      if (state.mode === "final") {
+        bodyHTML = `<div class="panel">${renderFinal()}</div>`;
+      } else {
+        const list = state.mode === "reorder" ? orderedReorderList() : orderedPracticeList();
+        const progressKey = state.mode === "reorder" ? "reorder" : "practice";
+
+        const badgeGroups = I18N[state.lang].groups;
+
+        const itemsByGroup = {};
+        list.forEach(item => {
+          const gKey = item.badge || "Lainnya";
+          if (!itemsByGroup[gKey]) itemsByGroup[gKey] = [];
+          itemsByGroup[gKey].push(item);
+        });
+
+        let sidebarHTML = "";
+        for (const [gKey, gItems] of Object.entries(itemsByGroup)) {
+          const groupName = badgeGroups[gKey] || `Bab ${gKey}`;
+          sidebarHTML += `<div class="group-header">${groupName}</div>`;
+          gItems.forEach(item => {
+            const active = item.id === state.activeId ? "active" : "";
+            const entry = state.progress[progressKey][item.id];
+            let done = "";
+            if (entry && entry.done) {
+              done = `<span class="score-pill ${scoreClass(entry.score)}">${entry.score}</span>`;
+            }
+            sidebarHTML += `<button class="problem-item ${active}" data-select="${item.id}">
+          <span class="badge">${item.badge}</span>
+          <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(getItemTitle(item))}</span>
+          ${done}
+        </button>`;
+          });
+        }
+
+        let mainHTML = state.mode === "reorder" ? renderReorder() : renderPractice();
+
+        bodyHTML = `
+      <div class="layout">
+        <nav class="problem-list">${sidebarHTML}</nav>
+        <div class="panel">${mainHTML}</div>
+      </div>
+    `;
+      }
+
+      app.innerHTML = `
+    <header class="site-header">
+      <div class="header-content">
+        <div class="header-badge">${t('headerBadge')}</div>
+        <h1>${t('headerTitle')}</h1>
+        <p>${t('headerQuote')}</p>
+      </div>
+      <div class="header-controls">
+        <button class="theme-toggle-btn" id="btn-lang-toggle">
+          ${globIcon}
+          <span>${state.lang === 'id' ? '🇬🇧 English' : '🇮🇩 Bahasa ID'}</span>
+        </button>
+        <button class="theme-toggle-btn" id="btn-theme-toggle">
+          ${state.theme === 'dark' ? sunIcon : moonIcon}
+          <span>${state.theme === 'dark' ? 'Light Mode' : 'Dark Mode'}</span>
+        </button>
+      </div>
+    </header>
+
+    ${modeSwitchHTML}
+    ${bodyHTML}
+
+    <p class="footer-note">${t('footerNote')}</p>
+  `;
+
+      attachEvents();
+    }
+
+    function renderFinal() {
+      const allItems = [
+        ...REORDER.map(r => ({ id: r.id, badge: r.badge, title: getItemTitle(r), kind: "reorder" })),
+        ...PRACTICE.map(p => ({ id: p.id, badge: p.badge, title: getItemTitle(p), kind: "practice" }))
+      ];
+      const total = allItems.length;
+      let attempted = 0;
+      let sumScore = 0;
+
+      const rows = allItems.map(item => {
+        const entry = state.progress[item.kind][item.id];
+        const kindLabel = item.kind === "reorder" ? t("modeReorder") : t("modePractice");
+        let statusHTML;
+        if (entry && entry.done) {
+          attempted++;
+          sumScore += entry.score;
+          statusHTML = `<span class="score-pill ${scoreClass(entry.score)}">${entry.score} / 100</span>`;
+        } else {
+          statusHTML = `<span class="hint" style="margin:0;">${t('statusNotAttempted')}</span>`;
+        }
+        return `<tr>
+      <td style="width:50px;"><span class="badge" style="font-family:'JetBrains Mono',monospace;font-size:0.75rem;padding:2px 6px;border-radius:4px;background:var(--primary-soft);color:var(--primary);">${item.badge}</span></td>
+      <td><strong>${esc(item.title)}</strong><br><span class="hint" style="margin:0;font-size:0.8rem;">${kindLabel}</span></td>
+      <td style="width:140px;">${statusHTML}</td>
+    </tr>`;
+      }).join("");
+
+      const overall = attempted > 0 ? Math.round(sumScore / attempted) : 0;
+      const finished = attempted === total;
+
+      return `
+    <div class="final-hero">
+      <div class="big-score">${overall}<span> / 100</span></div>
+      <div class="meta">
+        <p style="font-size:1.1rem;font-weight:700;color:var(--ink);">${t('finalSummaryTitle')}</p>
+        <p><strong>${attempted} ${t('colNo') === 'No.' ? 'dari' : 'out of'} ${total}</strong> ${t('finalCompleted')}</p>
+        <p>${finished ? t('finalAllDone') : t('finalIncomplete')}</p>
+      </div>
+    </div>
+    <p class="section-title">${t('finalTableTitle')}</p>
+    <table class="final-table">
+      <thead><tr><th>${t('finalColChapter')}</th><th>${t('finalColProblem')}</th><th>${t('finalColStatus')}</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  `;
+    }
+
+    function renderReorder() {
+      const problem = currentReorderProblem();
+      const rows = getItemRows(problem);
+      const n = rows.length;
+
+      let poolHTML = state.pool.map(idx => {
+        const row = rows[idx];
+        return `<button type="button" class="chip" data-pick="${idx}">
+      <p class="p">${esc(row.p)}</p>
+      <p class="a">${esc(row.a)}</p>
+    </button>`;
+      }).join("") || `<p class="hint" style="margin:0;padding:8px;">${t('reorderPoolEmpty')}</p>`;
+
+      let slotsHTML = "";
+      for (let i = 0; i < n; i++) {
+        const idx = state.chosen[i];
+        if (idx === undefined) {
+          slotsHTML += `<div class="slot" aria-disabled="true"><span class="num">${i + 1}.</span><span class="txt hint" style="margin:0;">${t('reorderSlotEmpty')}</span></div>`;
+        } else {
+          const row = rows[idx];
+          let cls = "filled";
+          let mark = "";
+          if (state.checked) {
+            const correct = idx === i;
+            cls += correct ? " correct" : " incorrect";
+            mark = `<span class="mark ${correct ? 'correct' : 'incorrect'}">${correct ? '\u2713' : '\u2717'}</span>`;
+          }
+          slotsHTML += `<button type="button" class="slot ${cls}" data-unpick="${i}" ${state.checked ? 'disabled' : ''}>
+        <span class="num">${i + 1}.</span>
+        <span class="txt"><p class="p">${esc(row.p)}</p><p class="a">${esc(row.a)}</p></span>
+        ${mark}
+      </button>`;
+        }
+      }
+
+      let scoreHTML = "";
+      if (state.checked) {
+        const correctCount = state.chosen.filter((idx, i) => idx === i).length;
+        const good = correctCount === n;
+        const stepWord = state.lang === 'en' ? 'steps' : 'langkah';
+        const posText = state.lang === 'en' ? 'are in the correct position' : 'berada di posisi yang tepat';
+        const outOfText = state.lang === 'en' ? 'out of' : 'dari';
+        scoreHTML = `<div class="score-line ${good ? 'good' : 'bad'}">
+      <span>${good ? '\u2713' : '\u2717'}</span>
+      <span>${correctCount} ${outOfText} ${n} ${stepWord} ${posText}${good ? t('scorePerfect') : '.'}</span>
+    </div>`;
+      }
+
+      let reviewHTML = "";
+      if (state.checked) {
+        reviewHTML = `<div class="review">
+      <p class="section-title">${t('reviewTitle')}</p>
+      <table><thead><tr><th>${t('colNo')}</th><th>${t('colPremise')}</th><th>${t('colReason')}</th></tr></thead><tbody>
+        ${rows.map((r, i) => `<tr><td class="no">${i + 1}</td><td>${esc(r.p)}</td><td>${esc(r.a)}</td></tr>`).join("")}
+      </tbody></table>
+    </div>`;
+      }
+
+      const canCheck = state.chosen.length === n && !state.checked;
+
+      return `
+    <div class="statement-card">
+      <div class="label">${problem.badge} &middot; ${t('badgeTheorem')}</div>
+      <p>${esc(getItemStatement(problem))}</p>
+    </div>
+    <p class="section-title">${t('reorderPoolTitle')}</p>
+    <p class="hint">${t('reorderPoolHint')}</p>
+    <div class="pool">${poolHTML}</div>
+    <p class="section-title">${t('reorderSlotsTitle')}</p>
+    <div class="slots">${slotsHTML}</div>
+    <div class="btn-row">
+      <button class="btn" id="btn-check" ${canCheck ? "" : "disabled"}>${t('btnCheckReorder')}</button>
+      <button class="btn secondary" id="btn-reset">${t('btnResetReorder')}</button>
+    </div>
+    ${scoreHTML}
+    ${reviewHTML}
+  `;
+    }
+
+    function renderHintSection(problem) {
+      const hStage = state.hintStage[problem.id] || 0;
+      const cStage = state.clueStage[problem.id] || 0;
+      const clueMode = hStage >= 2;
+      const clueRemaining = 3 - state.clueUsedTotal;
+
+      let revealedHTML = "";
+      if (hStage >= 1) {
+        revealedHTML += `<div class="hint-box"><span class="hint-tag">Hint 1</span><p>${esc(getItemHint1(problem))}</p></div>`;
+      }
+      if (hStage >= 2) {
+        revealedHTML += `<div class="hint-box"><span class="hint-tag">Hint 2</span><p>${esc(getItemHint2(problem))}</p></div>`;
+      }
+      for (let lvl = 1; lvl <= cStage; lvl++) {
+        revealedHTML += renderClueContent(problem, lvl);
+      }
+
+      let btnHTML = "";
+      if (!clueMode) {
+        const label = hStage === 0 ? t("btnHint1") : t("btnHint2");
+        btnHTML = `<button type="button" class="btn secondary" id="btn-hint">${label}</button>`;
+      } else if (cStage >= 3) {
+        btnHTML = `<button type="button" class="btn ghost" disabled>${t('allCluesRevealed')}</button>`;
+      } else if (clueRemaining <= 0) {
+        btnHTML = `<button type="button" class="btn ghost" disabled>${t('clueBudgetExhausted')}</button>`;
+      } else {
+        const nextLevel = cStage + 1;
+        const labelMap = I18N[state.lang].clueBtns;
+        btnHTML = `<button type="button" class="btn secondary" id="btn-clue">${labelMap[nextLevel]}</button>
+      <span class="clue-budget">${t('remainingClues')}${clueRemaining}/3</span>`;
+      }
+
+      return `<div class="hint-section">
+    <p class="section-title">${t('helpTitle')}</p>
+    ${revealedHTML}
+    <div class="btn-row" style="margin-top:0;align-items:center;">${btnHTML}</div>
+  </div>`;
+    }
+
+    function renderPractice() {
+      const problem = currentPracticeProblem();
+      ensurePracticeRows(problem);
+      const rows = state.practiceRows[problem.id];
+      const entry = state.progress.practice[problem.id];
+      const done = !!(entry && entry.done);
+      const showModel = done && !!state.showModel[problem.id];
+      const ratingOpen = !!state.rating[problem.id];
+      const tips = getItemTips(problem);
+      const modelRows = getItemModel(problem);
+
+      let rowsHTML = rows.map((row, i) => `
+    <tr data-row="${i}">
+      <td class="no">${i + 1}</td>
+      <td><textarea data-field="p" placeholder="${t('phPremise')}">${esc(row.p)}</textarea></td>
+      <td><textarea data-field="a" placeholder="${t('phReason')}">${esc(row.a)}</textarea></td>
+      <td><button class="row-remove" data-remove="${i}" title="Hapus baris">&times;</button></td>
+    </tr>
+  `).join("");
+
+      let modelHTML = "";
+      if (showModel) {
+        modelHTML = `<div class="model-block">
+      <p class="section-title">${t('modelTitle')}</p>
+      <table><thead><tr><th>${t('colNo')}</th><th>${t('colPremise')}</th><th>${t('colReason')}</th></tr></thead><tbody>
+        ${modelRows.map((r, i) => `<tr><td class="no">${i + 1}</td><td>${esc(r.p)}</td><td>${esc(r.a)}</td></tr>`).join("")}
+      </tbody></table>
+    </div>`;
+      }
+
+      let ratingHTML = "";
+      if (ratingOpen && !done) {
+        ratingHTML = `
+      <p class="hint" style="margin:12px 0 4px;font-weight:600;color:var(--primary);">${t('ratingPrompt')}</p>
+      <div class="rating-row">
+        <button class="rating-btn" data-rate="40">${t('rate40')}</button>
+        <button class="rating-btn" data-rate="60">${t('rate60')}</button>
+        <button class="rating-btn" data-rate="80">${t('rate80')}</button>
+        <button class="rating-btn" data-rate="100">${t('rate100')}</button>
+      </div>
+    `;
+      }
+
+      const doneLabel = done ? `\u2713 ${t('btnDoneMarked')}${entry.score}` : t('btnMarkDone');
+      const toggleModelLabel = !done
+        ? t('btnShowModelLocked')
+        : (showModel ? (state.lang === 'en' ? 'Hide Model Solution' : 'Sembunyikan Solusi Model') : t('btnShowModel'));
+      const toggleModelAttrs = !done ? `disabled title="${t('modelLockedTitle')}"` : '';
+
+      return `
+    <div class="statement-card">
+      <div class="label">${problem.badge} &middot; ${t('badgePractice')}</div>
+      <p>${esc(getItemStatement(problem))}</p>
+    </div>
+    <div class="tips">
+      <p>${t('practiceTipsTitle')}</p>
+      <ul>${tips.map(tItem => `<li>${esc(tItem)}</li>`).join("")}</ul>
+    </div>
+    <p class="section-title">${t('practiceWorksheetTitle')}</p>
+    <table class="proof-table">
+      <thead><tr><th style="width:32px;">${t('colNo')}</th><th>${t('colPremise')}</th><th>${t('colReason')}</th><th style="width:24px;"></th></tr></thead>
+      <tbody>${rowsHTML}</tbody>
+    </table>
+    <div class="btn-row">
+      <button class="btn ghost" id="btn-add-row">${t('btnAddRow')}</button>
+      <button class="btn secondary" id="btn-toggle-model" ${toggleModelAttrs}>${toggleModelLabel}</button>
+      <button class="btn ${done ? 'secondary' : ''}" id="btn-mark-done">${doneLabel}</button>
+    </div>
+    ${ratingHTML}
+    ${modelHTML}
+    ${renderHintSection(problem)}
+  `;
+    }
+
+    /* ---------------------------------------------------------------
+       EVENTS
+    --------------------------------------------------------------- */
+    function attachEvents() {
+      const btnTheme = document.getElementById("btn-theme-toggle");
+      if (btnTheme) {
+        btnTheme.addEventListener("click", toggleTheme);
+      }
+
+      const btnLang = document.getElementById("btn-lang-toggle");
+      if (btnLang) {
+        btnLang.addEventListener("click", toggleLang);
+      }
+
+      document.querySelectorAll("[data-mode]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.mode = btn.getAttribute("data-mode");
+          if (state.mode === "reorder") {
+            state.activeId = orderedReorderList()[0].id;
+            resetReorder(currentReorderProblem());
+          } else if (state.mode === "practice") {
+            state.activeId = orderedPracticeList()[0].id;
+          }
+          render();
+        });
+      });
+
+      document.querySelectorAll("[data-select]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.activeId = btn.getAttribute("data-select");
+          if (state.mode === "reorder") resetReorder(currentReorderProblem());
+          render();
+        });
+      });
+
+      if (state.mode === "reorder") {
+        document.querySelectorAll("[data-pick]").forEach(el => {
+          el.addEventListener("click", () => {
+            if (state.checked) return;
+            const idx = parseInt(el.getAttribute("data-pick"), 10);
+            state.pool = state.pool.filter(i => i !== idx);
+            state.chosen.push(idx);
+            render();
+          });
+        });
+        document.querySelectorAll("[data-unpick]").forEach(el => {
+          el.addEventListener("click", () => {
+            if (state.checked) return;
+            const pos = parseInt(el.getAttribute("data-unpick"), 10);
+            const idx = state.chosen[pos];
+            if (idx === undefined) return;
+            state.chosen.splice(pos, 1);
+            state.pool.push(idx);
+            render();
+          });
+        });
+        const btnCheck = document.getElementById("btn-check");
+        if (btnCheck) btnCheck.addEventListener("click", () => {
+          state.checked = true;
+          const problem = currentReorderProblem();
+          const n = problem.rows.length;
+          const correctCount = state.chosen.filter((idx, i) => idx === i).length;
+          const score = Math.round((correctCount / n) * 100);
+          state.progress.reorder[problem.id] = { done: true, score };
+          saveProgress();
+          render();
+        });
+        const btnReset = document.getElementById("btn-reset");
+        if (btnReset) btnReset.addEventListener("click", () => {
+          resetReorder(currentReorderProblem());
+          render();
+        });
+      }
+
+      if (state.mode === "practice") {
+        const problem = currentPracticeProblem();
+        document.querySelectorAll("textarea[data-field]").forEach(ta => {
+          ta.addEventListener("input", () => {
+            const tr = ta.closest("tr");
+            const i = parseInt(tr.getAttribute("data-row"), 10);
+            const field = ta.getAttribute("data-field");
+            state.practiceRows[problem.id][i][field] = ta.value;
+          });
+        });
+        document.querySelectorAll("[data-remove]").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const i = parseInt(btn.getAttribute("data-remove"), 10);
+            state.practiceRows[problem.id].splice(i, 1);
+            render();
+          });
+        });
+        const btnAdd = document.getElementById("btn-add-row");
+        if (btnAdd) btnAdd.addEventListener("click", () => {
+          state.practiceRows[problem.id].push({ p: "", a: "" });
+          render();
+        });
+        const btnModel = document.getElementById("btn-toggle-model");
+        if (btnModel) btnModel.addEventListener("click", () => {
+          const entry = state.progress.practice[problem.id];
+          if (!entry || !entry.done) return;
+          state.showModel[problem.id] = !state.showModel[problem.id];
+          render();
+        });
+        const btnDone = document.getElementById("btn-mark-done");
+        if (btnDone) btnDone.addEventListener("click", () => {
+          const entry = state.progress.practice[problem.id];
+          if (entry && entry.done) {
+            delete state.progress.practice[problem.id];
+            state.rating[problem.id] = false;
+            saveProgress();
+            render();
+          } else {
+            state.rating[problem.id] = true;
+            render();
+          }
+        });
+        document.querySelectorAll("[data-rate]").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const score = parseInt(btn.getAttribute("data-rate"), 10);
+            state.progress.practice[problem.id] = { done: true, score };
+            state.rating[problem.id] = false;
+            saveProgress();
+            render();
+          });
+        });
+        const btnHint = document.getElementById("btn-hint");
+        if (btnHint) btnHint.addEventListener("click", () => {
+          const cur = state.hintStage[problem.id] || 0;
+          state.hintStage[problem.id] = Math.min(cur + 1, 2);
+          render();
+        });
+        const btnClue = document.getElementById("btn-clue");
+        if (btnClue) btnClue.addEventListener("click", () => {
+          const cur = state.clueStage[problem.id] || 0;
+          if (cur >= 3) return;
+          if (state.clueUsedTotal >= 3) return;
+          state.clueStage[problem.id] = cur + 1;
+          state.clueUsedTotal += 1;
+          render();
+        });
+      }
+    }
+
+    /* ---------------------------------------------------------------
+       INIT
+    --------------------------------------------------------------- */
+    (async function init() {
+      await loadProgress();
+      rollProblemOrder();
+      state.activeId = state.order.reorder[0];
+      resetReorder(currentReorderProblem());
+      render();
+    })();
+  </script>
+</body>
+
+</html>
